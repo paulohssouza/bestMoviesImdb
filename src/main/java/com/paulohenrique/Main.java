@@ -22,7 +22,6 @@ public class Main {
         HttpRequest request = HttpRequest.newBuilder(uri250BestMovies).GET().build();
         HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
         String body = response.body();
-        System.out.println(body);
 
         /*
           Extract the valid data
@@ -31,8 +30,16 @@ public class Main {
         JsonParser jsonParser = new JsonParser();
         List<Map<String, String>> movieList = jsonParser.parse(body);
 
+
         /*
           View and manipulate the data
          */
+
+        movieList.forEach((movie) -> {
+            System.out.println(movie.get("title"));
+            System.out.println(movie.get("image"));
+            System.out.println(movie.get("imDbRating"));
+            System.out.println("---------------------------");
+        });
     }
 }
