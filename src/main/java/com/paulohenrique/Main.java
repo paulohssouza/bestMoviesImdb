@@ -1,19 +1,38 @@
 package com.paulohenrique;
 
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.util.List;
+import java.util.Map;
+
 public class Main {
-    public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+    public static void main(String[] args) throws IOException, InterruptedException {
+        /*
+          Conexion from HTTP of IMDB 250 best movies.
+         */
 
-        // Press Shift+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
+        String url250BestMovies = "https://imdb-api.com/en/API/Top250Movies/k_45r7fn7q";
+        URI uri250BestMovies = URI.create(url250BestMovies);
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder(uri250BestMovies).GET().build();
+        HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
+        String body = response.body();
+        System.out.println(body);
 
-            // Press Shift+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
-        }
+        /*
+          Extract the valid data
+         */
+
+        JsonParser jsonParser = new JsonParser();
+        List<Map<String, String>> movieList = jsonParser.parse(body);
+
+        /*
+          View and manipulate the data
+         */
     }
 }
