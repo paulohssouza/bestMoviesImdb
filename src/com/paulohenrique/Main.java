@@ -3,7 +3,10 @@ package com.paulohenrique;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -75,14 +78,28 @@ public class Main {
             System.out.println("------------------------------------");
         });
         
-        System.out.println("\u001b[1m \u001b[37m \u001b[41m"
-        		+ "250 melhores séries:\u001b[m");
-        System.out.println("------------------------------------");
-        serieList.forEach((serie) -> {
-            System.out.println(serie.get("title"));
-            System.out.println(serie.get("image"));
-            System.out.println(serie.get("imDbRating"));
-            System.out.println("-------------------------------------");
+        GeneratorStickers generatorStickers = new GeneratorStickers();
+        
+        movieList.forEach((movie) -> {
+        	String urlImageString = movie.get("image");
+        	String titleFilmeString = movie.get("title");
+        	InputStream inputStream = null;
+			try {
+				inputStream = new URL(urlImageString).openStream();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+        	try {
+				generatorStickers.createSticker(inputStream, titleFilmeString);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         });
     }
 }
