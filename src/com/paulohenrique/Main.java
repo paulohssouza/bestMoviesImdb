@@ -45,24 +45,13 @@ public class Main {
         HttpResponse<String> response = httpClient.send(request, 
         		BodyHandlers.ofString());
         String body = response.body();
-        
-        String url250BestSeriesTv = "https://imdb-api.com/en/API/Top250TVs/" 
-        		+ userKeyApiImdb;
-        URI uri250BestSeriesTv = URI.create(url250BestSeriesTv);
-        HttpClient httpClient2 = HttpClient.newHttpClient();
-        HttpRequest request2 = HttpRequest.newBuilder(uri250BestSeriesTv)
-        		.GET().build();
-        HttpResponse<String> response2 = httpClient2.send(request2, 
-        		BodyHandlers.ofString());
-        String body2 = response2.body();
 
         /*
           Extract the valid data
          */
 
         JsonParser jsonParser = new JsonParser();
-        List<Map<String, String>> movieList = jsonParser.parse(body);
-        List<Map<String, String>> serieList = jsonParser.parse(body2);
+        List<Map<String, String>> contentList = jsonParser.parse(body);
 
 
         /*
@@ -71,18 +60,18 @@ public class Main {
         System.out.println("\u001b[1m \u001b[37m \u001b[41m"
         		+ "250 melhores filmes:\u001b[m");
         System.out.println("------------------------------------");
-        movieList.forEach((movie) -> {
-            System.out.println(movie.get("title"));
-            System.out.println(movie.get("image"));
-            System.out.println(movie.get("imDbRating"));
+        contentList.forEach((content) -> {
+            System.out.println(content.get("title"));
+            System.out.println(content.get("image"));
+            System.out.println(content.get("imDbRating"));
             System.out.println("------------------------------------");
         });
         
         GeneratorStickers generatorStickers = new GeneratorStickers();
         
-        movieList.forEach((movie) -> {
-        	String urlImageString = movie.get("image");
-        	String titleFilmeString = movie.get("title");
+        contentList.forEach((content) -> {
+        	String urlImageString = content.get("image");
+        	String titleFilmeString = content.get("title");
         	InputStream inputStream = null;
 			try {
 				inputStream = new URL(urlImageString).openStream();
